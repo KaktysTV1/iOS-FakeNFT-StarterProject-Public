@@ -170,8 +170,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
                 }
             }
         }
-        let cancelAction = UIAlertAction(title: "Отменить", style: .default) { _ in
-            self.dismiss(animated: true)
+        let cancelAction = UIAlertAction(title: "Отменить", style: .default) { [weak self] _ in
+            self?.dismiss(animated: true)
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAction)

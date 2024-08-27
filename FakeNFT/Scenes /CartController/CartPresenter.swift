@@ -41,8 +41,8 @@ final class CartPresenter: CartPresenterProtocol {
     }
     
     func count() -> Int {
-        let count: Int = cartContent.count
-        return count
+        return cartContent.count
+        
     }
 
     func getModel(indexPath: IndexPath) -> NftDataModel {
