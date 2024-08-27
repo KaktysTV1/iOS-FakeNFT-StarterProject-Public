@@ -201,9 +201,9 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     
     @objc private func didTapPaymentButton() {
         let paymentController = PaymentViewController()
-        paymentController.hidesBottomBarWhenPushed = true
+       // paymentController.hidesBottomBarWhenPushed = true
         navigationItem.backButtonTitle = ""
-        navigationController?.pushViewController(paymentController, animated: true)
+       // navigationController?.pushViewController(paymentController, animated: true)
     }
 }
 

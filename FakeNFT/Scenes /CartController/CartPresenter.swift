@@ -23,12 +23,12 @@ final class CartPresenter: CartPresenterProtocol {
     var cartContent: [NftDataModel] = []
     var orderIds: [String] = []
     
-    var mock1 = NftDataModel(createdAt: "13-04-2024", name: "mock1", images: ["mock1"], rating: 5, description: "", price: 1.78, author: "", id: "1")
-    var mock2 = NftDataModel(createdAt: "13-04-2024", name: "mock2", images: ["mock2"], rating: 2, description: "", price: 1.5, author: "", id: "2")
+   var mock1 = NftDataModel(createdAt: "13-04-2024", name: "mock1", images: ["mock1"], rating: 5, description: "", price: 1.78, author: "", id: "1")
+   var mock2 = NftDataModel(createdAt: "13-04-2024", name: "mock2", images: ["mock2"], rating: 2, description: "", price: 1.5, author: "", id: "2")
     
     init(viewController: CartViewControllerProtocol) {
         self.viewController = viewController
-        cartContent = [mock1, mock2]
+       cartContent = [mock1, mock2]
         
     }
         
