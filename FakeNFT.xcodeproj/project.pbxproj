@@ -58,6 +58,7 @@
 		EF7B39682C7D5B990049CB4D /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39672C7D5B990049CB4D /* PaymentViewController.swift */; };
 		EF7B396A2C7FA0E20049CB4D /* PaymentPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39692C7FA0E20049CB4D /* PaymentPresenter.swift */; };
 		EF7B396C2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B396B2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift */; };
+		EF7B396E2C7FA3600049CB4D /* SuccessPayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B396D2C7FA3600049CB4D /* SuccessPayController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +133,7 @@
 		EF7B39672C7D5B990049CB4D /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		EF7B39692C7FA0E20049CB4D /* PaymentPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPresenter.swift; sourceTree = "<group>"; };
 		EF7B396B2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCollectionViewCell.swift; sourceTree = "<group>"; };
+		EF7B396D2C7FA3600049CB4D /* SuccessPayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessPayController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -416,6 +418,7 @@
 				EF7B39672C7D5B990049CB4D /* PaymentViewController.swift */,
 				EF7B39692C7FA0E20049CB4D /* PaymentPresenter.swift */,
 				EF7B396B2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift */,
+				EF7B396D2C7FA3600049CB4D /* SuccessPayController.swift */,
 			);
 			path = PaymentController;
 			sourceTree = "<group>";
@@ -563,6 +566,7 @@
 				EF7B39512C7D54BD0049CB4D /* NftDataModel.swift in Sources */,
 				EF7B39532C7D54E20049CB4D /* CurrencyDataModel.swift in Sources */,
 				EF7B39652C7D5B4A0049CB4D /* CartDeletePresenter.swift in Sources */,
+				EF7B396E2C7FA3600049CB4D /* SuccessPayController.swift in Sources */,
 				3FC8C38B29D242E90081F015 /* ProductDetailsTableViewCell.swift in Sources */,
 				3F478ECF29DB474E00F6D39E /* Colors.swift in Sources */,
 				0C79EE662A76DDFF00EE90EA /* NftDetailViewController.swift in Sources */,
