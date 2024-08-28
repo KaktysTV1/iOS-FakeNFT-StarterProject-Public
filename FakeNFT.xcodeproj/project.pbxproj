@@ -56,6 +56,8 @@
 		EF7B39632C7D5B250049CB4D /* CartDeleteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39622C7D5B250049CB4D /* CartDeleteViewController.swift */; };
 		EF7B39652C7D5B4A0049CB4D /* CartDeletePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39642C7D5B4A0049CB4D /* CartDeletePresenter.swift */; };
 		EF7B39682C7D5B990049CB4D /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39672C7D5B990049CB4D /* PaymentViewController.swift */; };
+		EF7B396A2C7FA0E20049CB4D /* PaymentPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39692C7FA0E20049CB4D /* PaymentPresenter.swift */; };
+		EF7B396C2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B396B2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -128,6 +130,8 @@
 		EF7B39622C7D5B250049CB4D /* CartDeleteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDeleteViewController.swift; sourceTree = "<group>"; };
 		EF7B39642C7D5B4A0049CB4D /* CartDeletePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDeletePresenter.swift; sourceTree = "<group>"; };
 		EF7B39672C7D5B990049CB4D /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
+		EF7B39692C7FA0E20049CB4D /* PaymentPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentPresenter.swift; sourceTree = "<group>"; };
+		EF7B396B2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -410,6 +414,8 @@
 			isa = PBXGroup;
 			children = (
 				EF7B39672C7D5B990049CB4D /* PaymentViewController.swift */,
+				EF7B39692C7FA0E20049CB4D /* PaymentPresenter.swift */,
+				EF7B396B2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift */,
 			);
 			path = PaymentController;
 			sourceTree = "<group>";
@@ -564,11 +570,13 @@
 				EF7B39682C7D5B990049CB4D /* PaymentViewController.swift in Sources */,
 				3F478ED129DB476500F6D39E /* Fonts.swift in Sources */,
 				0C79EE6A2A76DE1000EE90EA /* NftDetailAssembly.swift in Sources */,
+				EF7B396C2C7FA1010049CB4D /* CurrencyCollectionViewCell.swift in Sources */,
 				3FC8C39329D246BA0081F015 /* DateFormatters+Presets.swift in Sources */,
 				0CFCB7422A78013E0009A829 /* Nft.swift in Sources */,
 				0CF2C2DD2A783CE600FDC837 /* ErrorView.swift in Sources */,
 				0C79EE682A76DE0900EE90EA /* NftDetailPresenter.swift in Sources */,
 				3F68069B29CBBAF100B4F915 /* ProductDetailsTableViewController.swift in Sources */,
+				EF7B396A2C7FA0E20049CB4D /* PaymentPresenter.swift in Sources */,
 				0CFCB7402A78002A0009A829 /* ExamplePutService.swift in Sources */,
 				3F6806D529CBBEC700B4F915 /* NetworkTask.swift in Sources */,
 				0CF2C2DB2A783C1B00FDC837 /* LoadingView.swift in Sources */,
