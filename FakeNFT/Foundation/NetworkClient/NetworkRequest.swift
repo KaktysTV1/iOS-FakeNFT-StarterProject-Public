@@ -10,11 +10,7 @@ enum HttpMethod: String {
 protocol NetworkRequest {
     var endpoint: URL? { get }
     var httpMethod: HttpMethod { get }
-    var dto: Dto? { get }
-}
-
-protocol Dto {
-    func asDictionary() -> [String: String]
+    var dto: Encodable? { get }
 }
 
 // default values

@@ -16,10 +16,12 @@ protocol CartDeleteControllerProtocol: AnyObject {
 final class CartDeleteViewController: UIViewController, CartDeleteControllerProtocol {
     
     private var presenter: CartDeletePresenterProtocol?
+    private let servicesAssembly: ServicesAssembly
     private (set) var nftImage: UIImage
     private var idForDelete: String
     
-    init(nftImage: UIImage, idForDelete: String) {
+    init(servicesAssembly: ServicesAssembly, nftImage: UIImage, idForDelete: String) {
+        self.servicesAssembly = servicesAssembly
         self.nftImage = nftImage
         self.idForDelete = idForDelete
         super.init(nibName: nil, bundle: nil)
@@ -77,7 +79,7 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = CartDeletePresenter(viewController: self, nftIdForDelete: idForDelete, nftImage: nftImage)
+        presenter = CartDeletePresenter(viewController: self, orderService: servicesAssembly.orderService, nftIdForDelete: idForDelete, nftImage: nftImage)
         setupViews()
     }
     
@@ -170,8 +172,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
                 }
             }
         }
-        let cancelAction = UIAlertAction(title: "Отменить", style: .default) { [weak self] _ in
-            self?.dismiss(animated: true)
+        let cancelAction = UIAlertAction(title: "Отменить", style: .default) { _ in
+            self.dismiss(animated: true)
         }
         alert.addAction(cancelAction)
         alert.addAction(deleteAction)

@@ -11,10 +11,13 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     
     private var presenter: CartPresenterProtocol?
     
-    init() {
+    let servicesAssembly: ServicesAssembly
+    
+    init(servicesAssembly: ServicesAssembly) {
+        self.servicesAssembly = servicesAssembly
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -80,7 +83,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         
         setupViews()
         setupConstraints()
-
+        
         presenter = CartPresenter(viewController: self)
         
         cartTable.register(CartTableViewCell.self, forCellReuseIdentifier: "CartTableViewCell")
@@ -156,7 +159,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
             guard let count = presenter?.count() else { return }
             guard let totalPrice = presenter?.totalPrice() else { return }
             countNftInCartLabel.text = "\(count) NFT"
-            totalPriceLabel.text = "\(totalPrice) ETH"
+            totalPriceLabel.text = "\(round(totalPrice * 100) / 100) ETH"
             placeholderLabel.isHidden = true
             bottomView.isHidden = false
             cartTable.reloadData()
@@ -201,7 +204,9 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     
     @objc private func didTapPaymentButton() {
         let paymentController = PaymentViewController()
+        paymentController.hidesBottomBarWhenPushed = true
         navigationItem.backButtonTitle = ""
+        navigationController?.pushViewController(paymentController, animated: true)
     }
 }
 
@@ -228,7 +233,7 @@ extension CartViewController: UITableViewDelegate {
 
 extension CartViewController: CartTableViewCellDelegate {
     func didTapDeleteButton(id: String, image: UIImage) {
-        let deleteViewController = CartDeleteViewController(nftImage: image, idForDelete: id)
+        let deleteViewController = CartDeleteViewController(servicesAssembly: servicesAssembly, nftImage: image, idForDelete: id)
         deleteViewController.modalPresentationStyle = .overCurrentContext
         self.tabBarController?.present(deleteViewController, animated: true)
     }
