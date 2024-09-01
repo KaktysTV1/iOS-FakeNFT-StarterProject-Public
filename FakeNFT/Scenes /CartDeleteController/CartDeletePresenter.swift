@@ -19,26 +19,33 @@ final class CartDeletePresenter: CartDeletePresenterProtocol {
     private var nftIdForDelete: String
     private (set) var nftImage: UIImage
     
-    init(viewController: CartDeleteControllerProtocol, orderService: OrderService,  nftIdForDelete: String, nftImage: UIImage) {
+    var cart: [NftDataModel]
+    private var cartPresenter: CartPresenterProtocol?
+    
+    init(viewController: CartDeleteControllerProtocol, orderService: OrderService, nftIdForDelete: String, nftImage: UIImage, cart: [NftDataModel], cartPresenter: CartPresenterProtocol?) {
         self.viewController = viewController
         self.orderService = orderService
         self.nftIdForDelete = nftIdForDelete
         self.nftImage = nftImage
+        self.cart = cart
+        self.cartPresenter = cartPresenter
     }
-    
+
     func deleteNftFromCart(completion: @escaping (Result<[String], Error>) -> Void) {
         viewController?.startLoadIndicator()
-        orderService?.removeNftFromStorage(id: nftIdForDelete, completion: { result in
-            switch result {
-            case let .success(data):
-                self.viewController?.stopLoadIndicator()
-                completion(.success(data))
-            case let .failure(error):
-                self.viewController?.showNetworkError(message: "\(error)")
-                self.viewController?.stopLoadIndicator()
-                print(error)
-            }
-        } )
+
+        if let index = cart.firstIndex(where: { $0.id == nftIdForDelete }) {
+            cart.remove(at: index)
+            viewController?.stopLoadIndicator()
+            completion(.success(cart.map { $0.id }))
+
+            // Обновление корзины
+            cartPresenter?.updateCartContent(with: cart)
+        } else {
+            viewController?.stopLoadIndicator()
+            let error = NSError(domain: "com.yourapp.cart", code: 404, userInfo: [NSLocalizedDescriptionKey: "Товар не найден в корзине"])
+            viewController?.showNetworkError(message: "\(error.localizedDescription)")
+            completion(.failure(error))
+        }
     }
 }
-

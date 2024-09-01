@@ -79,7 +79,7 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = CartDeletePresenter(viewController: self, orderService: servicesAssembly.orderService, nftIdForDelete: idForDelete, nftImage: nftImage)
+        presenter = CartDeletePresenter(viewController: self, orderService: servicesAssembly.orderService, nftIdForDelete: idForDelete, nftImage: nftImage, cart: )
         setupViews()
     }
     
