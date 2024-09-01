@@ -160,7 +160,7 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
     }
     
     func showNetworkError(message: String) {
-        let alert = UIAlertController(title: "Что-то пошло не так", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Что-то пошло не так", message: "Произошла ошибка, повторить?", preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Еще раз", style: .default) { _ in
             self.presenter?.deleteNftFromCart { [weak self] result in
                 guard let self = self else { return }
