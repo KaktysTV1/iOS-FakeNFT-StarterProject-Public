@@ -86,12 +86,10 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         self.currency = currency
         currencyNameLabel.text = currency.title
         currencyShortNameLabel.text = currency.name
-        var image: UIImage
-        if UIImage(named: currency.image) == nil {
-            image = UIImage(named: "NFTCard")!
-        } else {
-            image = UIImage(named: currency.image)!
-        }
+        guard let image = UIImage(named: currency.image) ?? UIImage(named: "NFTCard") else {
+                print("Ошибка: не удалось найти изображение для \(currency.image) или 'NFTCard'")
+                return
+            }
         
         currencyImage.image = image
     }

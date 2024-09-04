@@ -8,6 +8,8 @@
 import Foundation
 
 struct ChangeOrderRequest: NetworkRequest {
+    var dto: (any Dto)?
+    
     
     var httpMethod: HttpMethod { .put }
     var nfts: Encodable?

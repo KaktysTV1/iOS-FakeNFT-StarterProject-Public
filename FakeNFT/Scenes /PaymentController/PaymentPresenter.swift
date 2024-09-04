@@ -61,17 +61,10 @@ final class PaymentPresenter: PaymentPresenterProtocol {
         default:
             print("something werid")
         }
-        
-        /*paymentService?.payOrder(currencyId: selectedCurrency.id) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            
-            }
-        }*/
     }
     
     func getCurrencies() {
         paymentController?.startLoadIndicator()
-            
+        paymentController?.stopLoadIndicator()
     }
 }

@@ -32,7 +32,7 @@ final class OrderService: OrderServiceProtocol {
         newIdsStorage.removeAll(where: { $0 == id } )
         
         let request = ChangeOrderRequest(nfts: newIdsStorage)
-        networkClient.send(request: request, type: ChangedOrderDataModel.self) { result in
+        networkClient.send(request: request, type: ChangedOrderDataModel.self) { [weak self] result in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 switch result {

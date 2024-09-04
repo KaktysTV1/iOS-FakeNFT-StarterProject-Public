@@ -65,6 +65,7 @@
 		EF7B39762C7FA9EC0049CB4D /* OrderDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39752C7FA9EC0049CB4D /* OrderDataModel.swift */; };
 		EF7B39782C7FAA1A0049CB4D /* ChangedOrderDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39772C7FAA1A0049CB4D /* ChangedOrderDataModel.swift */; };
 		EF7B397A2C7FAA500049CB4D /* ChangeOrderRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B39792C7FAA500049CB4D /* ChangeOrderRequest.swift */; };
+		EF7B397C2C861A3D0049CB4D /* CartDeleteViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7B397B2C861A3C0049CB4D /* CartDeleteViewControllerDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -146,6 +147,7 @@
 		EF7B39752C7FA9EC0049CB4D /* OrderDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDataModel.swift; sourceTree = "<group>"; };
 		EF7B39772C7FAA1A0049CB4D /* ChangedOrderDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangedOrderDataModel.swift; sourceTree = "<group>"; };
 		EF7B39792C7FAA500049CB4D /* ChangeOrderRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeOrderRequest.swift; sourceTree = "<group>"; };
+		EF7B397B2C861A3C0049CB4D /* CartDeleteViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDeleteViewControllerDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -424,6 +426,7 @@
 			isa = PBXGroup;
 			children = (
 				EF7B39622C7D5B250049CB4D /* CartDeleteViewController.swift */,
+				EF7B397B2C861A3C0049CB4D /* CartDeleteViewControllerDelegate.swift */,
 				EF7B39642C7D5B4A0049CB4D /* CartDeletePresenter.swift */,
 			);
 			path = CartDeleteController;
@@ -628,6 +631,7 @@
 				3F6806D129CBBE6B00B4F915 /* NetworkClient.swift in Sources */,
 				EF7B39762C7FA9EC0049CB4D /* OrderDataModel.swift in Sources */,
 				EF7B39632C7D5B250049CB4D /* CartDeleteViewController.swift in Sources */,
+				EF7B397C2C861A3D0049CB4D /* CartDeleteViewControllerDelegate.swift in Sources */,
 				EF7B397A2C7FAA500049CB4D /* ChangeOrderRequest.swift in Sources */,
 				0CFCB7442A7802440009A829 /* NftDetailInput.swift in Sources */,
 				EF7B39742C7FA9B00049CB4D /* OrderStorage.swift in Sources */,

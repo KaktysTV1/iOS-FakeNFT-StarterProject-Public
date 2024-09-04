@@ -170,6 +170,18 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         cartTable.reloadData()
     }
     
+    func updtaeCountNftInCartLabel(){
+        if let count = presenter?.count() {
+            countNftInCartLabel.text = "\(count) NFT"
+        }
+    }
+    
+    func updateTotalPriceLabel(){
+        if let price = presenter?.totalPrice() {
+            totalPriceLabel.text = "\(round(price * 100) / 100) ETH"
+        }
+    }
+    
     func startLoadIndicator() {
         loaderView.showLoading()
     }
@@ -233,9 +245,31 @@ extension CartViewController: UITableViewDelegate {
 
 extension CartViewController: CartTableViewCellDelegate {
     func didTapDeleteButton(id: String, image: UIImage) {
-        let deleteViewController = CartDeleteViewController(servicesAssembly: servicesAssembly, nftImage: image, idForDelete: id)
+        let deleteViewController = CartDeleteViewController(
+            servicesAssembly: servicesAssembly,
+            nftImage: image,
+            idForDelete: id
+        )
+        
+        let presenter = CartDeletePresenter(viewController: deleteViewController,
+                                            orderService: servicesAssembly.orderService,
+                                            nftIdForDelete: id,
+                                            nftImage: image,
+                                            cart: presenter?.cartContent ?? [])
+        
+        presenter.delegate = self
+        deleteViewController.presenter = presenter
+        
         deleteViewController.modalPresentationStyle = .overCurrentContext
+        
         self.tabBarController?.present(deleteViewController, animated: true)
     }
 }
 
+extension CartViewController: CartDeleteDelegate {
+    func updateCart(with items: [NftDataModel]) {
+        presenter?.updateCartContent(with: items)
+        updtaeCountNftInCartLabel()
+        updateTotalPriceLabel()
+    }
+}

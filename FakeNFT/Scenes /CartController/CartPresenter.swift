@@ -14,32 +14,30 @@ protocol CartPresenterProtocol {
     func getModel(indexPath: IndexPath) -> NftDataModel
     func updateCartContent(with items: [NftDataModel])
     func removeItem(at index: Int)
+    var cartContent: [NftDataModel] { get }
 }
 
 final class CartPresenter: CartPresenterProtocol {
-   
+    
     private weak var viewController: CartViewControllerProtocol?
     private var userDefaults = UserDefaults.standard
     private let filterKey = "filter"
     
-    var cartContent: [NftDataModel] = []
-    
-    // Моковые данные для начальной загрузки
-    var mock1 = NftDataModel(createdAt: "13-04-2024", name: "mock1", images: ["mock1"], rating: 5, description: "", price: 1.78, author: "", id: "1")
-    var mock2 = NftDataModel(createdAt: "13-04-2024", name: "mock2", images: ["mock2"], rating: 2, description: "", price: 1.5, author: "", id: "2")
+    var cartContent: [NftDataModel] = [
+        NftDataModel(createdAt: "13-04-2024", name: "mock1", images: ["mock1"], rating: 5, description: "", price: 1.78, author: "", id: "1"),
+        NftDataModel(createdAt: "13-04-2024", name: "mock2", images: ["mock2"], rating: 4, description: "", price: 1.5, author: "", id: "2")
+    ]
     
     init(viewController: CartViewControllerProtocol) {
         self.viewController = viewController
-        cartContent = [mock1, mock2] // Инициализация корзины с моковыми данными
     }
     
     // Метод для обновления корзины
     func updateCartContent(with items: [NftDataModel]) {
-        self.cartContent = items
+        cartContent = items
+        viewController?.updateCartTable()
         if cartContent.isEmpty {
-            self.viewController?.showPlaceholder()
-        } else {
-            self.viewController?.updateCartTable()
+            viewController?.showPlaceholder()
         }
     }
     
@@ -60,5 +58,10 @@ final class CartPresenter: CartPresenterProtocol {
     
     func getModel(indexPath: IndexPath) -> NftDataModel {
         return cartContent[indexPath.row]
+    }
+}
+
+extension CartPresenter: CartDeleteDelegate {
+    func updateCart(with items: [NftDataModel]) {
     }
 }

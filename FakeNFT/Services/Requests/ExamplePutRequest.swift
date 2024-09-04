@@ -5,9 +5,10 @@ struct ExamplePutRequest: NetworkRequest {
        URL(string: "\(RequestConstants.baseURL)/api/v1/someMethod")
    }
    var httpMethod: HttpMethod = .put
+   var dto: Dto?
 }
 
-struct ExampleDtoObject {
+struct ExampleDtoObject: Dto {
    let param1: String
    let param2: String
 
