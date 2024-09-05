@@ -23,7 +23,7 @@ final class ExamplePutServiceImpl: ExamplePutService {
         completion: @escaping ExamplePutCompletion
     ) {
         let dto = ExampleDtoObject(param1: param1, param2: param2)
-        let request = ExamplePutRequest(dto: dto)
+        let request = ExamplePutRequest()
         networkClient.send(request: request, type: ExamplePutResponse.self) { result in
             switch result {
             case .success(let putResponse):

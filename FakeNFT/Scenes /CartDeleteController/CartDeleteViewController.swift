@@ -15,11 +15,13 @@ protocol CartDeleteControllerProtocol: AnyObject {
 
 final class CartDeleteViewController: UIViewController, CartDeleteControllerProtocol {
     
-    private var presenter: CartDeletePresenterProtocol?
+    var presenter: CartDeletePresenterProtocol?
+    private let servicesAssembly: ServicesAssembly
     private (set) var nftImage: UIImage
     private var idForDelete: String
     
-    init(nftImage: UIImage, idForDelete: String) {
+    init(servicesAssembly: ServicesAssembly, nftImage: UIImage, idForDelete: String) {
+        self.servicesAssembly = servicesAssembly
         self.nftImage = nftImage
         self.idForDelete = idForDelete
         super.init(nibName: nil, bundle: nil)
@@ -77,7 +79,6 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = CartDeletePresenter(viewController: self, nftIdForDelete: idForDelete, nftImage: nftImage)
         setupViews()
     }
     
@@ -158,7 +159,7 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
     }
     
     func showNetworkError(message: String) {
-        let alert = UIAlertController(title: "Что-то пошло не так", message: message, preferredStyle: .alert)
+        let alert = UIAlertController(title: "Что-то пошло не так", message: "Произошла ошибка, повторить?", preferredStyle: .alert)
         let deleteAction = UIAlertAction(title: "Еще раз", style: .default) { _ in
             self.presenter?.deleteNftFromCart { [weak self] result in
                 guard let self = self else { return }
