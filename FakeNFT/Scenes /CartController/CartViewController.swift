@@ -194,27 +194,58 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     }
     
     @objc private func didTapSortButton() {
+        
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         
         alert.addAction(UIAlertAction(title: "По цене", style: .default, handler: { [weak self] (UIAlertAction) in
             guard let self = self else { return }
-            //TODO: реализовать сортировку
+            self.presenter?.sortCart(filter: .price)
+            self.cartTable.reloadData()
+            
+            UserDefaults.standard.set("Цена", forKey: "Sort")
+            UserDefaults.standard.synchronize()
         } ))
         
         alert.addAction(UIAlertAction(title: "По рейтингу", style: .default, handler: { [weak self] (UIAlertAction) in
             guard let self = self else { return }
-            //TODO: реализовать сортировку
+            self.presenter?.sortCart(filter: .rating)
+            self.cartTable.reloadData()
+            
+            UserDefaults.standard.set("Рейтинг", forKey: "Sort")
+            UserDefaults.standard.synchronize()
         } ))
         
         alert.addAction(UIAlertAction(title: "По названию", style: .default, handler: { [weak self] (UIAlertAction) in
             guard let self = self else { return }
-            //TODO: реализовать сортировку
+            self.presenter?.sortCart(filter: .title)
+            self.cartTable.reloadData()
+            
+            UserDefaults.standard.set("Название", forKey: "Sort")
+            UserDefaults.standard.synchronize()
         } ))
         
         alert.addAction(UIAlertAction(title: "Закрыть", style: .cancel, handler: { (UIAlertAction) in
         } ))
         
         self.present(alert, animated: true)
+    }
+    
+    func sorted(){
+        let sorting = UserDefaults.standard.string(forKey: "Sort")
+        if sorting == nil {
+            print()
+        } else {
+            switch sorting {
+            case "Цена":
+                self.presenter?.sortCart(filter: .price)
+            case "Рейтинг":
+                self.presenter?.sortCart(filter: .rating)
+            case "Название":
+                self.presenter?.sortCart(filter: .title)
+            default:
+                print()
+            }
+        }
     }
     
     @objc private func didTapPaymentButton() {

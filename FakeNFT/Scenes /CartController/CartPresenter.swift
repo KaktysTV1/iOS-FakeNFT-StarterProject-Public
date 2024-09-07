@@ -17,6 +17,7 @@ protocol CartPresenterProtocol {
     func getNftById(id: String)
     func setOrder()
     func getOrder()
+    func sortCart(filter: CartFilter.FilterBy)
     var cartContent: [NftDataModel] { get set }
     var viewController: CartViewControllerProtocol? { get set }
 }
@@ -28,11 +29,17 @@ final class CartPresenter: CartPresenterProtocol {
     private var nftByIdService: NftByIdServiceProtocol?
     private var userDefaults = UserDefaults.standard
     private let filterKey = "filter"
+    private var currentFilter: CartFilter.FilterBy {
+        get {
+            let id = userDefaults.integer(forKey: filterKey)
+            return CartFilter.FilterBy(rawValue: id) ?? .id
+        }
+        set {
+            userDefaults.setValue(newValue.rawValue, forKey: filterKey)
+        }
+    }
     
-    var cartContent: [NftDataModel] = [
-        NftDataModel(createdAt: "13-04-2024", name: "mock1", images: ["mock1"], rating: 5, description: "", price: 1.78, author: "", id: "1"),
-        NftDataModel(createdAt: "13-04-2024", name: "mock2", images: ["mock2"], rating: 4, description: "", price: 1.5, author: "", id: "2")
-    ]
+    var cartContent: [NftDataModel] = []
     
     var order: OrderDataModel?
     var nftById: NftDataModel?
@@ -143,6 +150,19 @@ final class CartPresenter: CartPresenterProtocol {
     
     func getModel(indexPath: IndexPath) -> NftDataModel {
         return cartContent[indexPath.row]
+    }
+    
+    func sortCart(filter: CartFilter.FilterBy) {
+        currentFilter = filter
+        cartContent = cartContent.sorted(by: CartFilter.filter[currentFilter] ?? CartFilter.filterById)
+        viewController?.updateCartTable()
+    }
+    
+    @objc private func didCartSorted(_ notification: Notification) {
+        guard let orderService = orderService  else { return }
+        
+        let orderUnsorted = orderService.nftsStorage.compactMap { NftDataModel(nft: $0) }
+        cartContent = orderUnsorted.sorted(by: CartFilter.filter[currentFilter] ?? CartFilter.filterById )
     }
 }
 
