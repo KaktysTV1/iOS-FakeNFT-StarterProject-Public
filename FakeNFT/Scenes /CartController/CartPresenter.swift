@@ -14,12 +14,18 @@ protocol CartPresenterProtocol {
     func getModel(indexPath: IndexPath) -> NftDataModel
     func updateCartContent(with items: [NftDataModel])
     func removeItem(at index: Int)
-    var cartContent: [NftDataModel] { get }
+    func getNftById(id: String)
+    func setOrder()
+    func getOrder()
+    var cartContent: [NftDataModel] { get set }
+    var viewController: CartViewControllerProtocol? { get set }
 }
 
 final class CartPresenter: CartPresenterProtocol {
     
-    private weak var viewController: CartViewControllerProtocol?
+    weak var viewController: CartViewControllerProtocol?
+    private var orderService: OrderServiceProtocol?
+    private var nftByIdService: NftByIdServiceProtocol?
     private var userDefaults = UserDefaults.standard
     private let filterKey = "filter"
     
@@ -28,8 +34,14 @@ final class CartPresenter: CartPresenterProtocol {
         NftDataModel(createdAt: "13-04-2024", name: "mock2", images: ["mock2"], rating: 4, description: "", price: 1.5, author: "", id: "2")
     ]
     
-    init(viewController: CartViewControllerProtocol) {
+    var order: OrderDataModel?
+    var nftById: NftDataModel?
+    
+    init(viewController: CartViewControllerProtocol, orderService: OrderServiceProtocol, nftByIdService: NftByIdServiceProtocol) {
         self.viewController = viewController
+        self.orderService = orderService
+        self.nftByIdService = nftByIdService
+        self.orderService?.cartPresenter = self
     }
     
     // Метод для обновления корзины
@@ -54,6 +66,79 @@ final class CartPresenter: CartPresenterProtocol {
     
     func count() -> Int {
         return cartContent.count
+    }
+    
+    func getOrder() {
+        viewController?.startLoadIndicator()
+        orderService?.loadOrder() { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                switch result {
+                case .success(let order):
+                    self.order = order
+                    self.cartContent = []
+                    if !order.nfts.isEmpty {
+                        order.nfts.forEach {
+                            self.getNftById(id: $0)
+                        }
+                        
+                        self.viewController?.updateCartTable()
+                    }
+                    
+                    //self.sortCart(filter: self.currentFilter)
+                    self.viewController?.stopLoadIndicator()
+                    self.viewController?.updateCartTable()
+                    self.viewController?.showPlaceholder()
+                case .failure(let error):
+                    print(error)
+                    self.viewController?.stopLoadIndicator()
+                }
+            }
+        }
+    }
+    
+    func getNftById(id: String) {
+        viewController?.startLoadIndicator()
+        nftByIdService?.loadNft(id: id) { [weak self] result in
+            guard let self = self else { return }
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                switch result {
+                case .success(let nft):
+                    self.nftById = nft
+                    
+                    let contains = self.cartContent.contains {
+                        model in
+                        return model.id == nft.id
+                    }
+                    
+                    if contains {
+                        guard let nft = self.nftById else {
+                            print("Ошибка: nftById оказался nil")
+                            return
+                        }
+                        self.cartContent.append(nft)
+                    }
+                    
+                    self.viewController?.showPlaceholder()
+                    self.viewController?.stopLoadIndicator()
+                    //self.sortCart(filter: self.currentFilter)
+                    
+                    self.viewController?.updateCartTable()
+                case .failure(let error):
+                    print(error)
+                    self.viewController?.stopLoadIndicator()
+                }
+            }
+        }
+    }
+    
+    func setOrder() {
+        guard let order = self.orderService?.nftsStorage else { return }
+        self.cartContent = order
+        
+        viewController?.updateCartTable()
     }
     
     func getModel(indexPath: IndexPath) -> NftDataModel {

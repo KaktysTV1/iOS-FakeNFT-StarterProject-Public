@@ -84,11 +84,14 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         setupViews()
         setupConstraints()
         
-        presenter = CartPresenter(viewController: self)
+        presenter = CartPresenter(viewController: self,
+                                  orderService: servicesAssembly.orderService,
+                                  nftByIdService: servicesAssembly.nftByIdService)
         
         cartTable.register(CartTableViewCell.self, forCellReuseIdentifier: "CartTableViewCell")
         cartTable.delegate = self
         cartTable.dataSource = self
+        presenter?.getOrder()
         showPlaceholder()
     }
     
@@ -252,7 +255,7 @@ extension CartViewController: CartTableViewCellDelegate {
         )
         
         let presenter = CartDeletePresenter(viewController: deleteViewController,
-                                            orderService: servicesAssembly.orderService,
+                                            orderService: servicesAssembly.orderService as! OrderService,
                                             nftIdForDelete: id,
                                             nftImage: image,
                                             cart: presenter?.cartContent ?? [])
