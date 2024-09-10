@@ -93,10 +93,10 @@ final class CartPresenter: CartPresenterProtocol {
                         self.viewController?.updateCartTable()
                     }
                     
-                    //self.sortCart(filter: self.currentFilter)
-                    self.viewController?.stopLoadIndicator()
-                    self.viewController?.updateCartTable()
+                    self.sortCart(filter: self.currentFilter)
                     self.viewController?.showPlaceholder()
+                    self.viewController?.updateCartTable()
+                    self.viewController?.stopLoadIndicator()
                 case .failure(let error):
                     print(error)
                     self.viewController?.stopLoadIndicator()
@@ -114,25 +114,29 @@ final class CartPresenter: CartPresenterProtocol {
                 switch result {
                 case .success(let nft):
                     self.nftById = nft
-                    
-                    let contains = self.cartContent.contains {
-                        model in
+
+                    // Сначала проверяем, что nftById не является nil
+                    guard let nft = self.nftById else {
+                        print("Ошибка: nftById оказался nil")
+                        return
+                    }
+
+                    // Затем проверяем, содержится ли объект в cartContent
+                    let contains = self.cartContent.contains { model in
                         return model.id == nft.id
                     }
-                    
-                    if contains {
-                        guard let nft = self.nftById else {
-                            print("Ошибка: nftById оказался nil")
-                            return
-                        }
+
+                    // Если объект еще не в массиве, добавляем его
+                    if !contains {
                         self.cartContent.append(nft)
                     }
-                    
+
+                    // Обновляем интерфейс
                     self.viewController?.showPlaceholder()
-                    self.viewController?.stopLoadIndicator()
-                    //self.sortCart(filter: self.currentFilter)
-                    
+                    self.sortCart(filter: self.currentFilter)
                     self.viewController?.updateCartTable()
+                    self.viewController?.stopLoadIndicator()
+                    
                 case .failure(let error):
                     print(error)
                     self.viewController?.stopLoadIndicator()
@@ -140,6 +144,7 @@ final class CartPresenter: CartPresenterProtocol {
             }
         }
     }
+
     
     func setOrder() {
         guard let order = self.orderService?.nftsStorage else { return }

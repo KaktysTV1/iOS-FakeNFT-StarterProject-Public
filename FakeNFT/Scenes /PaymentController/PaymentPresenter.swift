@@ -10,29 +10,45 @@ import Foundation
 protocol PaymentPresenterProtocol {
     var selectedCurrency: CurrencyDataModel? { get set }
     func count() -> Int
+    func getCurrencies()
     func getModel(indexPath: IndexPath) -> CurrencyDataModel
     func payOrder()
-    func getCurrencies()
 }
 
 final class PaymentPresenter: PaymentPresenterProtocol {
     
     private weak var paymentController: PaymentViewControllerProtocol?
+    private var paymentService: PaymentServiceProtocol?
+    private var orderService: OrderServiceProtocol?
     private var currencies: [CurrencyDataModel] = []
     var selectedCurrency: CurrencyDataModel? {
         didSet {
             if selectedCurrency != nil {
-            paymentController?.didSelectCurrency(isEnable: true)
+                paymentController?.didSelectCurrency(isEnable: true)
             }
         }
     }
     
-    var mock1 = CurrencyDataModel(title: "Bitcoin", name: "BTC", image: "Bitcoin", id: "1")
-    var mock2 = CurrencyDataModel(title: "Tether", name: "USDT", image: "Tether", id: "2")
-    
-    init(paymentController: PaymentViewControllerProtocol) {
+    init(paymentController: PaymentViewControllerProtocol, paymentService: PaymentServiceProtocol, orderService: OrderServiceProtocol) {
         self.paymentController = paymentController
-        self.currencies = [mock1, mock2]
+        self.paymentService = paymentService
+        self.orderService = orderService
+    }
+    
+    func getCurrencies() {
+        paymentController?.startLoadIndicator()
+        paymentService?.getCurrencies { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case let .success(data):
+                self.currencies = data
+                self.paymentController?.updateCurrencyList()
+                self.paymentController?.stopLoadIndicator()
+            case let .failure(error):
+                print(error)
+                self.paymentController?.stopLoadIndicator()
+            }
+        }
     }
     
     func getModel(indexPath: IndexPath) -> CurrencyDataModel {
@@ -48,23 +64,28 @@ final class PaymentPresenter: PaymentPresenterProtocol {
     func payOrder() {
         paymentController?.startLoadIndicator()
         guard let selectedCurrency = selectedCurrency else { return }
-        
-        var result = Int.random(in: 0..<2)
-        
-        switch result {
-            case 1:
-                paymentController?.didPayment(paymentResult: true)
-                paymentController?.stopLoadIndicator()
-            case 0:
-                paymentController?.didPayment(paymentResult: false)
-                paymentController?.stopLoadIndicator()
-        default:
-            print("something werid")
+        paymentService?.payOrder(currencyId: selectedCurrency.id) { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case let .success(data):
+                self.emptyCart()
+                self.paymentController?.didPayment(paymentResult: data.success)
+                self.paymentController?.stopLoadIndicator()
+            case .failure(_):
+                self.paymentController?.didPayment(paymentResult: false)
+                self.paymentController?.stopLoadIndicator()
+            }
         }
     }
     
-    func getCurrencies() {
-        paymentController?.startLoadIndicator()
-        paymentController?.stopLoadIndicator()
+    func emptyCart() {
+        orderService?.removeAllNftFromStorage() { result in
+            switch result {
+            case let .success(data):
+                break
+            case .failure(_):
+                break
+            }
+        }
     }
 }

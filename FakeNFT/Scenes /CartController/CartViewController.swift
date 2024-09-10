@@ -9,7 +9,7 @@ import UIKit
 
 final class CartViewController: UIViewController, CartViewControllerProtocol {
     
-    private var presenter: CartPresenterProtocol?
+    var presenter: CartPresenterProtocol?
     
     let servicesAssembly: ServicesAssembly
     
@@ -197,10 +197,11 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
         
+        
         alert.addAction(UIAlertAction(title: "По цене", style: .default, handler: { [weak self] (UIAlertAction) in
             guard let self = self else { return }
             self.presenter?.sortCart(filter: .price)
-            self.cartTable.reloadData()
+            updateCartTable()
             
             UserDefaults.standard.set("Цена", forKey: "Sort")
             UserDefaults.standard.synchronize()
@@ -209,7 +210,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         alert.addAction(UIAlertAction(title: "По рейтингу", style: .default, handler: { [weak self] (UIAlertAction) in
             guard let self = self else { return }
             self.presenter?.sortCart(filter: .rating)
-            self.cartTable.reloadData()
+            updateCartTable()
             
             UserDefaults.standard.set("Рейтинг", forKey: "Sort")
             UserDefaults.standard.synchronize()
@@ -218,7 +219,7 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         alert.addAction(UIAlertAction(title: "По названию", style: .default, handler: { [weak self] (UIAlertAction) in
             guard let self = self else { return }
             self.presenter?.sortCart(filter: .title)
-            self.cartTable.reloadData()
+            updateCartTable()
             
             UserDefaults.standard.set("Название", forKey: "Sort")
             UserDefaults.standard.synchronize()
@@ -249,11 +250,12 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     }
     
     @objc private func didTapPaymentButton() {
-        let paymentController = PaymentViewController()
+        let paymentController = PaymentViewController(servicesAssembly: servicesAssembly, cartController: self)
         paymentController.hidesBottomBarWhenPushed = true
         navigationItem.backButtonTitle = ""
         navigationController?.pushViewController(paymentController, animated: true)
     }
+
 }
 
 extension CartViewController: UITableViewDataSource {

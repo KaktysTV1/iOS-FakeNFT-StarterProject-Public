@@ -86,16 +86,11 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         self.currency = currency
         currencyNameLabel.text = currency.title
         currencyShortNameLabel.text = currency.name
-        guard let image = UIImage(named: currency.image) ?? UIImage(named: "NFTCard") else {
-                print("Ошибка: не удалось найти изображение для \(currency.image) или 'NFTCard'")
-                return
-            }
-        
-        currencyImage.image = image
+        let image = URL(string: currency.image)
+        currencyImage.kf.setImage(with: image, placeholder: UIImage(named: "close"))
     }
     
     func selectedCell(wasSelected: Bool) {
         contentView.layer.borderWidth = wasSelected ? 1 : 0
     }
 }
-

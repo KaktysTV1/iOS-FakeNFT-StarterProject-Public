@@ -19,9 +19,13 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     
     private var presenter: PaymentPresenterProtocol?
     private let termsUrl = URL(string: "https://yandex.ru/legal/practicum_termsofuse/")
-    private var cartPresenter: CartPresenter?
+    var cartController: CartViewController
     
-    init() {
+    private let servicesAssembly: ServicesAssembly
+    
+    init(servicesAssembly: ServicesAssembly, cartController: CartViewController) {
+        self.servicesAssembly = servicesAssembly
+        self.cartController = cartController
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -50,20 +54,20 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         
         let attributedString = NSMutableAttributedString(string: "Совершая покупку, вы соглашаетесь с условиями" + " " + "Пользовательского соглашения")
         
-
+        
         let startPosition = "Совершая покупку, вы соглашаетесь с условиями".count + 1
         let lenOfLink = "Пользовательского соглашения".count
         attributedString.setAttributes([.font: UIFont.caption2], range: NSMakeRange(0, attributedString.length))
         attributedString.setAttributes([.link: termsUrl], range: NSMakeRange(startPosition, lenOfLink))
-
+        
         textView.backgroundColor = .clear
         textView.attributedText = attributedString
         textView.isUserInteractionEnabled = true
         textView.isEditable = false
         textView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         textView.linkTextAttributes = [
-            .foregroundColor: UIColor(named: "Blue") ?? .blue,
+            .foregroundColor: UIColor(named: "Blue"),
             .font: UIFont.caption2
         ]
         
@@ -86,7 +90,7 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = PaymentPresenter(paymentController: self)
+        presenter = PaymentPresenter(paymentController: self, paymentService: servicesAssembly.paymentService, orderService: servicesAssembly.orderService)
         setupViews()
         currencyList.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: "CurrencyCell")
         currencyList.dataSource = self
@@ -151,9 +155,12 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         if paymentResult {
             let successPayController = SuccessPayController()
             successPayController.modalPresentationStyle = .fullScreen
+            self.cartController.presenter?.cartContent = []
+            self.cartController.updateCartTable()
+            self.cartController.showPlaceholder()
             present(successPayController, animated: true) {
-                    self.navigationController?.popViewController(animated: true)
-                    self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers?[0]
+                self.navigationController?.popViewController(animated: true)
+                self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers?[0]
             }
         } else {
             showPaymentError()
@@ -190,10 +197,10 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CurrencyCell", for: indexPath) as? CurrencyCollectionViewCell else { return UICollectionViewCell() }
-            guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
-            cell.updateCell(currency: model)
-            return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CurrencyCell", for: indexPath) as? CurrencyCollectionViewCell else { return UICollectionViewCell() }
+        guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
+        cell.updateCell(currency: model)
+        return cell
     }
 }
 
@@ -237,5 +244,3 @@ extension PaymentViewController: UITextViewDelegate {
         return false
     }
 }
-
-
