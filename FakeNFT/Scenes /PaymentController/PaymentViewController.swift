@@ -79,7 +79,7 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.backgroundColor = UIColor(named: "Black")
+        button.backgroundColor = UIColor(named: "Gray")
         button.setTitle("Оплатить", for: .normal)
         button.addTarget(self, action: #selector(didTapPayButton), for: .touchUpInside)
         return button
