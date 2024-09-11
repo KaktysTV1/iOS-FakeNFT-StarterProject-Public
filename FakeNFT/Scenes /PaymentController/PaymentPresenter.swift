@@ -7,6 +7,8 @@
 
 import Foundation
 
+//MARK: - Protocol
+
 protocol PaymentPresenterProtocol {
     var selectedCurrency: CurrencyDataModel? { get set }
     func count() -> Int
@@ -34,6 +36,8 @@ final class PaymentPresenter: PaymentPresenterProtocol {
         self.paymentService = paymentService
         self.orderService = orderService
     }
+    
+//MARK: - Metods
     
     func getCurrencies() {
         paymentController?.startLoadIndicator()

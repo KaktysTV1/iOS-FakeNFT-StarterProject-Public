@@ -9,6 +9,8 @@ import UIKit
 
 final class SuccessPayController: UIViewController {
     
+//MARK: - UI Elements
+    
     private lazy var successImage: UIImageView = {
         let image = UIImageView()
         image.image = UIImage(named: "SuccessImage")
@@ -39,6 +41,8 @@ final class SuccessPayController: UIViewController {
         setupViews()
     }
     
+//MARK: - Private Metods
+    
     private func setupViews() {
         view.backgroundColor = UIColor(named: "White")
         view.addSubview(successImage)
@@ -68,6 +72,8 @@ final class SuccessPayController: UIViewController {
         catalogButton.translatesAutoresizingMaskIntoConstraints = false
 
     }
+    
+//MARK: - Object
     
     @objc private func didTapCatalogButton() {
         self.dismiss(animated: true)

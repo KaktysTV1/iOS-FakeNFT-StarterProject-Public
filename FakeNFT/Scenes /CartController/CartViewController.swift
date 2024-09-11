@@ -22,6 +22,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - UI Elements
+    
     private lazy var sortButton: UIBarButtonItem = {
         let sortButton = UIBarButtonItem()
         sortButton.image = UIImage(named: "SortButton")
@@ -95,6 +97,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         showPlaceholder()
     }
     
+    //MARK: - Private metods
+    
     private func setupNavigationBar() {
         guard let navigationBar = navigationController?.navigationBar else {
             return
@@ -153,6 +157,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         ])
     }
     
+//MARK: - Metods
+    
     func showPlaceholder() {
         if presenter?.count() == 0 {
             placeholderLabel.isHidden = false
@@ -193,6 +199,26 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         loaderView.hideLoading()
     }
     
+    func sorted(){
+        let sorting = UserDefaults.standard.string(forKey: "Sort")
+        if sorting == nil {
+            print()
+        } else {
+            switch sorting {
+            case "Цена":
+                self.presenter?.sortCart(filter: .price)
+            case "Рейтинг":
+                self.presenter?.sortCart(filter: .rating)
+            case "Название":
+                self.presenter?.sortCart(filter: .title)
+            default:
+                print()
+            }
+        }
+    }
+    
+    //MARK: - Object
+    
     @objc private func didTapSortButton() {
         
         let alert = UIAlertController(title: "Сортировка", message: nil, preferredStyle: .actionSheet)
@@ -231,24 +257,6 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
         self.present(alert, animated: true)
     }
     
-    func sorted(){
-        let sorting = UserDefaults.standard.string(forKey: "Sort")
-        if sorting == nil {
-            print()
-        } else {
-            switch sorting {
-            case "Цена":
-                self.presenter?.sortCart(filter: .price)
-            case "Рейтинг":
-                self.presenter?.sortCart(filter: .rating)
-            case "Название":
-                self.presenter?.sortCart(filter: .title)
-            default:
-                print()
-            }
-        }
-    }
-    
     @objc private func didTapPaymentButton() {
         let paymentController = PaymentViewController(servicesAssembly: servicesAssembly, cartController: self)
         paymentController.hidesBottomBarWhenPushed = true
@@ -257,6 +265,8 @@ final class CartViewController: UIViewController, CartViewControllerProtocol {
     }
 
 }
+
+//MARK: - Table Data Source
 
 extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -272,6 +282,8 @@ extension CartViewController: UITableViewDataSource {
         return cell
     }
 }
+
+//MARK: - Delegate
 
 extension CartViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

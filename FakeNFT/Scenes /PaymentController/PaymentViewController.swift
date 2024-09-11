@@ -7,6 +7,8 @@
 
 import UIKit
 
+//MARK: - Protocol
+
 protocol PaymentViewControllerProtocol: AnyObject {
     func updateCurrencyList()
     func didSelectCurrency(isEnable: Bool)
@@ -32,6 +34,8 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//MARK: - UI Elements
     
     private lazy var currencyList: UICollectionView = {
         let colletionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -98,6 +102,8 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         presenter?.getCurrencies()
     }
     
+//MARK: - Private Metods
+    
     private func setupViews() {
         view.backgroundColor = UIColor(named: "White")
         guard let navigationBar = navigationController?.navigationBar else { return }
@@ -137,9 +143,13 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         paymentButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+//MARK: - Object
+    
     @objc private func didTapPayButton() {
         presenter?.payOrder()
     }
+    
+//MARK: - Metods
     
     func updateCurrencyList() {
         currencyList.reloadData()
@@ -189,6 +199,8 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     }
 }
 
+//MARK: - Data Source
+
 extension PaymentViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -203,6 +215,8 @@ extension PaymentViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
+//MARK: - Delegate
 
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

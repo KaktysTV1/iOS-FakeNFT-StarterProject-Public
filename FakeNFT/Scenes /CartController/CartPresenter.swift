@@ -8,6 +8,8 @@
 import Foundation
 import UIKit
 
+//MARK: - Protocol
+
 protocol CartPresenterProtocol {
     func totalPrice() -> Float
     func count() -> Int
@@ -50,6 +52,8 @@ final class CartPresenter: CartPresenterProtocol {
         self.nftByIdService = nftByIdService
         self.orderService?.cartPresenter = self
     }
+    
+//MARK: - Metods
     
     // Метод для обновления корзины
     func updateCartContent(with items: [NftDataModel]) {
@@ -163,6 +167,8 @@ final class CartPresenter: CartPresenterProtocol {
         viewController?.updateCartTable()
     }
     
+//MARK: - Object
+    
     @objc private func didCartSorted(_ notification: Notification) {
         guard let orderService = orderService  else { return }
         
@@ -170,6 +176,8 @@ final class CartPresenter: CartPresenterProtocol {
         cartContent = orderUnsorted.sorted(by: CartFilter.filter[currentFilter] ?? CartFilter.filterById )
     }
 }
+
+//MARK: - Delegate
 
 extension CartPresenter: CartDeleteDelegate {
     func updateCart(with items: [NftDataModel]) {

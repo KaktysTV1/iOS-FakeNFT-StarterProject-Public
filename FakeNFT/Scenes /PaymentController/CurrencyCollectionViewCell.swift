@@ -12,6 +12,8 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
     private (set) var currency: CurrencyDataModel?
     
+//MARK: - UI Elements
+    
     private lazy var imageFieldView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(named: "Black")
@@ -48,6 +50,8 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
     
+//MARK: - Private Metods
+    
     private func setupViews() {
         contentView.backgroundColor = UIColor(named: "LightGray")
         contentView.layer.cornerRadius = 12
@@ -81,6 +85,8 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         currencyShortNameLabel.translatesAutoresizingMaskIntoConstraints = false
         currencyImage.translatesAutoresizingMaskIntoConstraints = false
     }
+    
+//MARK: - Metods
     
     func updateCell(currency: CurrencyDataModel) {
         self.currency = currency

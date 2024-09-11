@@ -8,6 +8,8 @@
 import UIKit
 import Kingfisher
 
+//MARK: - Protocol
+
 protocol CartTableViewCellDelegate: AnyObject {
     func didTapDeleteButton(id: String, image: UIImage)
 }
@@ -16,6 +18,8 @@ final class CartTableViewCell: UITableViewCell {
     
     weak var delegate: CartTableViewCellDelegate?
     private var id: String?
+    
+//MARK: - UI Elements
     
     private lazy var fieldView: UIView = {
         let fieldView = UIView()
@@ -69,6 +73,8 @@ final class CartTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+//MARK: - Privet metods
+    
     private func setupViews() {
         contentView.backgroundColor = .white
         self.contentView.addSubview(fieldView)
@@ -114,6 +120,8 @@ final class CartTableViewCell: UITableViewCell {
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+//MARK: - Metods
+    
     func updateCell(with model: NftDataModel) {
         titleLabel.text = model.name
         imageNft.kf.setImage(with: URL(string: model.images[0]))
@@ -122,6 +130,8 @@ final class CartTableViewCell: UITableViewCell {
         priceValue.text = "\(model.price) ETH"
         self.id = model.id
     }
+    
+//MARK: - Object
     
     @objc private func didTapDeleteButton() {
         guard let id = self.id else { return }
