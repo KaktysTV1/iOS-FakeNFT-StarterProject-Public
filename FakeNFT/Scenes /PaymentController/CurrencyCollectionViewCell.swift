@@ -12,6 +12,8 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     
     private (set) var currency: CurrencyDataModel?
     
+//MARK: - UI Elements
+    
     private lazy var imageFieldView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(named: "Black")
@@ -48,6 +50,8 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         fatalError("init(coder:) has not been implemented")
     }
     
+//MARK: - Private Metods
+    
     private func setupViews() {
         contentView.backgroundColor = UIColor(named: "LightGray")
         contentView.layer.cornerRadius = 12
@@ -82,20 +86,17 @@ final class CurrencyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
         currencyImage.translatesAutoresizingMaskIntoConstraints = false
     }
     
+//MARK: - Metods
+    
     func updateCell(currency: CurrencyDataModel) {
         self.currency = currency
         currencyNameLabel.text = currency.title
         currencyShortNameLabel.text = currency.name
-        guard let image = UIImage(named: currency.image) ?? UIImage(named: "NFTCard") else {
-                print("Ошибка: не удалось найти изображение для \(currency.image) или 'NFTCard'")
-                return
-            }
-        
-        currencyImage.image = image
+        let image = URL(string: currency.image)
+        currencyImage.kf.setImage(with: image, placeholder: UIImage(named: "close"))
     }
     
     func selectedCell(wasSelected: Bool) {
         contentView.layer.borderWidth = wasSelected ? 1 : 0
     }
 }
-

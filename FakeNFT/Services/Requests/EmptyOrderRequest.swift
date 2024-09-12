@@ -1,13 +1,13 @@
 //
-//  ChangeOrderRequest.swift
+//  EmptyOrderRequest.swift
 //  FakeNFT
 //
-//  Created by Андрей Чупрыненко on 28.08.2024.
+//  Created by Андрей Чупрыненко on 05.09.2024.
 //
 
 import Foundation
 
-struct ChangeOrderRequest: NetworkRequest {
+struct EmptyOrderRequest: NetworkRequest {
     
     var dto: (any Dto)?
     var httpMethod: HttpMethod { .put }
@@ -15,17 +15,8 @@ struct ChangeOrderRequest: NetworkRequest {
     
     var endpoint: URL? {
         var urlComponents = URLComponents(string: "\(RequestConstants.baseURL)/api/v1/orders/1")
-        var components: [URLQueryItem] = []
         
-        if let nfts = self.nfts {
-          for nft in nfts {
-            components.append(URLQueryItem(name: "nfts", value: nft))
-          }
-        } else {
-            components.append(URLQueryItem(name: "nfts", value: ""))
-        }
-        
-        
+        let components: [URLQueryItem] = []
         
         urlComponents?.queryItems = components
         return urlComponents?.url
@@ -34,8 +25,6 @@ struct ChangeOrderRequest: NetworkRequest {
     var isUrlEncoded: Bool {
       return true
     }
-    
-    let token = RequestConstants.token
     
     init(nfts: [String]) {
         self.nfts = nfts
