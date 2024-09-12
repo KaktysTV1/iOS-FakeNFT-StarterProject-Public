@@ -120,6 +120,9 @@
 
 **Скринкаст**
 
+![Запись экрана 2024-09-12 в 16 11 54](https://github.com/user-attachments/assets/1bd71587-bd6c-4319-887c-7b6c55f93858)
+
+
 Ссылка на скринкаст: https://disk.yandex.ru/i/grrOp18OLsYhWA
 
 ## Профиль
