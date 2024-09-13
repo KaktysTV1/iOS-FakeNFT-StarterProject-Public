@@ -7,6 +7,8 @@
 
 import UIKit
 
+//MARK: - Protocol
+
 protocol PaymentViewControllerProtocol: AnyObject {
     func updateCurrencyList()
     func didSelectCurrency(isEnable: Bool)
@@ -19,15 +21,21 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     
     private var presenter: PaymentPresenterProtocol?
     private let termsUrl = URL(string: "https://yandex.ru/legal/practicum_termsofuse/")
-    private var cartPresenter: CartPresenter?
+    var cartController: CartViewController
     
-    init() {
+    private let servicesAssembly: ServicesAssembly
+    
+    init(servicesAssembly: ServicesAssembly, cartController: CartViewController) {
+        self.servicesAssembly = servicesAssembly
+        self.cartController = cartController
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//MARK: - UI Elements
     
     private lazy var currencyList: UICollectionView = {
         let colletionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
@@ -50,20 +58,20 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         
         let attributedString = NSMutableAttributedString(string: "Совершая покупку, вы соглашаетесь с условиями" + " " + "Пользовательского соглашения")
         
-
+        
         let startPosition = "Совершая покупку, вы соглашаетесь с условиями".count + 1
         let lenOfLink = "Пользовательского соглашения".count
         attributedString.setAttributes([.font: UIFont.caption2], range: NSMakeRange(0, attributedString.length))
         attributedString.setAttributes([.link: termsUrl], range: NSMakeRange(startPosition, lenOfLink))
-
+        
         textView.backgroundColor = .clear
         textView.attributedText = attributedString
         textView.isUserInteractionEnabled = true
         textView.isEditable = false
         textView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         textView.linkTextAttributes = [
-            .foregroundColor: UIColor(named: "Blue") ?? .blue,
+            .foregroundColor: UIColor(named: "Blue"),
             .font: UIFont.caption2
         ]
         
@@ -75,7 +83,7 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         let button = UIButton()
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
-        button.backgroundColor = UIColor(named: "Black")
+        button.backgroundColor = UIColor(named: "Gray")
         button.setTitle("Оплатить", for: .normal)
         button.addTarget(self, action: #selector(didTapPayButton), for: .touchUpInside)
         return button
@@ -86,13 +94,15 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        presenter = PaymentPresenter(paymentController: self)
+        presenter = PaymentPresenter(paymentController: self, paymentService: servicesAssembly.paymentService, orderService: servicesAssembly.orderService)
         setupViews()
         currencyList.register(CurrencyCollectionViewCell.self, forCellWithReuseIdentifier: "CurrencyCell")
         currencyList.dataSource = self
         currencyList.delegate = self
         presenter?.getCurrencies()
     }
+    
+//MARK: - Private Metods
     
     private func setupViews() {
         view.backgroundColor = UIColor(named: "White")
@@ -133,9 +143,13 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         paymentButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+//MARK: - Object
+    
     @objc private func didTapPayButton() {
         presenter?.payOrder()
     }
+    
+//MARK: - Metods
     
     func updateCurrencyList() {
         currencyList.reloadData()
@@ -151,9 +165,12 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
         if paymentResult {
             let successPayController = SuccessPayController()
             successPayController.modalPresentationStyle = .fullScreen
+            self.cartController.presenter?.cartContent = []
+            self.cartController.updateCartTable()
+            self.cartController.showPlaceholder()
             present(successPayController, animated: true) {
-                    self.navigationController?.popViewController(animated: true)
-                    self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers?[0]
+                self.navigationController?.popViewController(animated: true)
+                self.tabBarController?.selectedViewController = self.tabBarController?.viewControllers?[0]
             }
         } else {
             showPaymentError()
@@ -182,6 +199,8 @@ final class PaymentViewController: UIViewController, PaymentViewControllerProtoc
     }
 }
 
+//MARK: - Data Source
+
 extension PaymentViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -190,12 +209,14 @@ extension PaymentViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CurrencyCell", for: indexPath) as? CurrencyCollectionViewCell else { return UICollectionViewCell() }
-            guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
-            cell.updateCell(currency: model)
-            return cell
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CurrencyCell", for: indexPath) as? CurrencyCollectionViewCell else { return UICollectionViewCell() }
+        guard let model = presenter?.getModel(indexPath: indexPath) else { return cell }
+        cell.updateCell(currency: model)
+        return cell
     }
 }
+
+//MARK: - Delegate
 
 extension PaymentViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -237,5 +258,3 @@ extension PaymentViewController: UITextViewDelegate {
         return false
     }
 }
-
-

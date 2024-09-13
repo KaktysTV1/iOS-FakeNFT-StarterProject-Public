@@ -7,6 +7,8 @@
 
 import UIKit
 
+//MARK: - Protocol
+
 protocol CartDeleteControllerProtocol: AnyObject {
     func showNetworkError(message: String)
     func startLoadIndicator()
@@ -30,6 +32,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+//MARK: - UI Elements
     
     private lazy var fieldView: UIView = {
         let field = UIView()
@@ -81,6 +85,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
         
         setupViews()
     }
+    
+//MARK: - Private Metods
     
     private func setupViews() {
         let blur = UIBlurEffect(style: .systemUltraThinMaterialLight)
@@ -134,6 +140,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
         deleteButton.translatesAutoresizingMaskIntoConstraints = false
     }
     
+//MARK: - Object
+    
     @objc private func didTapReturnButton() {
         dismiss(animated: true)
     }
@@ -149,6 +157,8 @@ final class CartDeleteViewController: UIViewController, CartDeleteControllerProt
             }
         }
     }
+    
+//MARK: - Metods
     
     func startLoadIndicator() {
         loaderView.showLoading()
